@@ -37,6 +37,12 @@
 接口变更必须版本化或向后兼容
 禁止接口层泄露实现细节
 
+服务调用只允许两种方式：外部（含客户端）统一经 gateway 分流并受 JWT 约束；服务端之间用 @DubboReference，视作程序内部访问，只传必要的用户 id 等上下文
+治理与运维端点（含 /governance/** 的写操作）同样适用：外部经 gateway 受 JWT 约束，服务间用 @DubboReference 且只做必要安全验证，不得作为绕过网关的 HTTP 后门
+禁止使用 @FeignClient
+禁止写死 service url 或 HttpClient 的 ip:端口
+外部系统（区块链 RPC / 支付 / webhook / LLM / 对象存储）不算服务间调用，按各自协议接入
+
 事件、订阅、状态机等机制必须显式建模
 事件名必须使用枚举或唯一常量
 
